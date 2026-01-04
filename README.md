@@ -41,55 +41,6 @@ src/
 
 ## Setup Instructions
 
-> **Note**: This is a basic structure. Follow these steps to initialize:
-
-### 1. Create Vite Project
-
-```bash
-cd frontend
-npm create vite@latest . -- --template react-ts
-npm install
-```
-
-### 2. Install UI and Styling Dependencies
-
-```bash
-npm install -D @types/react @types/react-dom
-npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-```
-
-### 3. Initialize Shadcn/ui
-
-```bash
-npx shadcn-ui@latest init
-```
-
-Follow the prompts to configure your project:
-- Choose your preferred styling
-- CSS Variables for theming
-
-### 4. Install Core Dependencies
-
-```bash
-# State management
-npm install @tanstack/react-query
-
-# Forms and validation
-npm install react-hook-form zod @hookform/resolvers
-
-# HTTP client
-npm install axios
-
-# Routing (if using client-side routing)
-npm install react-router-dom
-
-# Additional utilities
-npm install clsx tailwind-merge date-fns
-```
-
-### 5. Environment Configuration
-
 Create a `.env` file in the frontend root:
 
 ```env
@@ -102,18 +53,9 @@ VITE_APP_NAME=PM Tool
 VITE_APP_VERSION=1.0.0
 ```
 
-Create a `.env.example` for version control:
-
-```env
-VITE_API_URL=http://localhost:3000/api
-VITE_API_TIMEOUT=30000
-VITE_APP_NAME=PM Tool
-VITE_APP_VERSION=1.0.0
-```
-
-### 6. Start Development Server
-
 ```bash
+cd pm_tool_frontend
+npm install
 npm run dev
 ```
 
