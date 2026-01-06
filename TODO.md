@@ -4,11 +4,11 @@
 Frontend implementation tasks for the Project Management Tool. This document tracks all frontend development organized by milestone.
 
 **Tech Stack:**
-- Framework: React 18 + TypeScript + Vite
-- Styling: Shadcn/ui + Tailwind CSS
+- Framework: React 19 + TypeScript + Vite 7
+- Styling: Shadcn/ui + Tailwind CSS 4
 - State Management: React Query + Context API
 - Forms: React Hook Form + Zod
-- Routing: React Router v6
+- Routing: React Router v7
 - HTTP: Axios with interceptors
 - Real-time: Socket.io (Milestone 3+)
 
@@ -21,15 +21,16 @@ Establish core frontend functionality: user authentication, project management, 
 
 ### Setup & Configuration
 
-- [ ] Initialize Vite project: `npm create vite@latest pm-tool-frontend -- --template react-ts`
-- [ ] Install dependencies: `react-router-dom`, `@tanstack/react-query`, `axios`, `react-hook-form`, `zod`, `@hookform/resolvers`
-- [ ] Install Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
-- [ ] Initialize Tailwind: `npx tailwindcss init -p`
-- [ ] Configure Tailwind in `tailwind.config.js`
-- [ ] Set up Shadcn/ui: `npx shadcn-ui@latest init`
-- [ ] Install Shadcn components: button, card, dialog, form, input, label, select, textarea, dropdown-menu, avatar, badge, toast
-- [ ] Configure React Router v6
-- [ ] Set up React Query with QueryClientProvider
+- [x] Initialize Vite project: `npm create vite@latest pm-tool-frontend -- --template react-ts`
+- [x] Install dependencies: `react-router-dom`, `@tanstack/react-query`, `axios`, `react-hook-form`, `zod`, `@hookform/resolvers`
+- [x] Install Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
+- [x] Initialize Tailwind: `npx tailwindcss init -p`
+- [x] Configure Tailwind in `tailwind.config.js` (with CSS variables, theme customization, light/dark mode)
+- [x] Set up Shadcn/ui: `npx shadcn-ui@latest init` (new-york style, neutral base color)
+- [x] Install ESLint and configure (React, TypeScript, React Hooks plugins)
+- [x] Set up TypeScript with strict mode and path aliases
+- [ ] Configure React Router v7 (currently installed, not yet integrated in App.tsx)
+- [ ] Set up React Query with QueryClientProvider (currently installed, not yet integrated)
 
 ### Core Infrastructure
 
