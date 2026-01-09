@@ -30,7 +30,7 @@ Establish core frontend functionality: user authentication, project management, 
 - [x] Install ESLint and configure (React, TypeScript, React Hooks plugins)
 - [x] Set up TypeScript with strict mode and path aliases
 - [x] Configure React Router v7 (integrated in App.tsx with public/protected route structure)
-- [ ] Set up React Query with QueryClientProvider (currently installed, not yet integrated)
+- [x] Set up React Query with QueryClientProvider 
 
 ### Core Infrastructure
 
