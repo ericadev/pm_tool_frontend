@@ -29,15 +29,15 @@ Establish core frontend functionality: user authentication, project management, 
 - [x] Set up Shadcn/ui: `npx shadcn-ui@latest init` (new-york style, neutral base color)
 - [x] Install ESLint and configure (React, TypeScript, React Hooks plugins)
 - [x] Set up TypeScript with strict mode and path aliases
-- [ ] Configure React Router v7 (currently installed, not yet integrated in App.tsx)
+- [x] Configure React Router v7 (integrated in App.tsx with public/protected route structure)
 - [ ] Set up React Query with QueryClientProvider (currently installed, not yet integrated)
 
 ### Core Infrastructure
 
 - [ ] Create Axios instance with interceptors (`src/lib/axios.ts`)
 - [ ] Implement token refresh logic in interceptors
-- [ ] Create auth context (`src/features/auth/context/AuthContext.tsx`)
-- [ ] Create protected route component (`src/components/layout/ProtectedRoute.tsx`)
+- [x] Create auth context (`src/features/auth/context/AuthContext.tsx`)
+- [x] Create protected route component (`src/components/layout/ProtectedRoute.tsx`)
 - [ ] Set up main layout with header and sidebar (`src/components/layout/`)
 
 ### Authentication Feature (`src/features/auth/`)
