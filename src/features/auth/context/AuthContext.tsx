@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useState, useEffect } from 'react'
+import { createContext, useState, useEffect } from 'react'
+import type { ReactNode } from 'react'
 
 export interface User {
   id: string
@@ -17,6 +18,7 @@ export interface AuthContextType {
   logout: () => Promise<void>
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 interface AuthProviderProps {
