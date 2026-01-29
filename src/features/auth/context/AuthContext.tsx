@@ -3,7 +3,8 @@ import { createContext, ReactNode, useState, useEffect } from 'react'
 export interface User {
   id: string
   email: string
-  name: string
+  firstName?: string
+  lastName?: string
   avatar?: string
 }
 
@@ -44,10 +45,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [])
 
   const login = async (email: string, password: string) => {
-    // TODO: Implement login with backend API
-    // Save token to localStorage
-    // Set user state
-    console.log('Login called with:', { email, password })
+    setIsLoading(true)
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL
+      const response = await fetch(`${apiUrl}users/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Login failed')
+      }
+
+      const data = await response.json()
+      const token = data.token
+      const userData: User = {
+        id: data.id,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        avatar: data.avatar,
+      }
+
+      localStorage.setItem('authToken', token)
+      setUser(userData)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const register = async (email: string, password: string, name: string) => {
