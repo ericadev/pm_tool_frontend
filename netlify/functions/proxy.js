@@ -15,10 +15,18 @@ export async function handler(event) {
     };
   }
 
-  try {
-    const targetUrl =
-      "https://pmtoolfastapi-production.up.railway.app" + event.path;
+  const BACKEND_BASE_URL =
+  "https://pmtoolfastapi-production.up.railway.app";
 
+  const path = event.path.replace(
+      "/.netlify/functions/proxy",
+      ""
+    );
+
+  const targetUrl = `${BACKEND_BASE_URL}${path}`;
+
+  try {
+    
     const response = await fetch(targetUrl, {
       method: event.httpMethod,
       headers: {
