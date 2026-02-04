@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
+import { authService } from '../services/auth.service'
 
 export interface User {
   id: string
@@ -30,40 +31,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check if user is already logged in (from localStorage or API)
-    const checkAuth = async () => {
+    // Restore user session from localStorage
+    const restoreSession = () => {
       try {
         const token = localStorage.getItem('authToken')
-        if (token) {
-          // TODO: Verify token with backend and get current user
-          // For now, just mark as done loading
+        const userJson = localStorage.getItem('user')
+
+        if (token && userJson) {
+          const user = JSON.parse(userJson)
+          setUser(user)
         }
+      } catch {
+        // Invalid data in localStorage, clear it
+        localStorage.removeItem('authToken')
+        localStorage.removeItem('user')
       } finally {
         setIsLoading(false)
       }
     }
 
-    checkAuth()
+    restoreSession()
   }, [])
 
   const login = async (email: string, password: string) => {
     setIsLoading(true)
     try {
-      const apiUrl = import.meta.env.VITE_API_URL
-      const response = await fetch(`${apiUrl}users/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Login failed')
-      }
-
-      const data = await response.json()
-      const token = data.token
+      const data = await authService.login(email, password)
+      const token = data.access_token
       const userData: User = {
         id: data.id,
         email: data.email,
@@ -73,6 +67,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       localStorage.setItem('authToken', token)
+      localStorage.setItem('user', JSON.stringify(userData))
       setUser(userData)
     } finally {
       setIsLoading(false)
@@ -87,8 +82,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   const logout = async () => {
-    // TODO: Call backend logout endpoint
+    try {
+      await authService.logout()
+    } catch {
+      // Logout may fail, but we still clear locally
+    }
     localStorage.removeItem('authToken')
+    localStorage.removeItem('user')
     setUser(null)
   }
 
