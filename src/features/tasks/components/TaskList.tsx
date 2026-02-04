@@ -1,5 +1,5 @@
 import { useTasks } from '../hooks/useTasks'
-import type { Task, TaskStatus, TaskPriority } from '@/types/index'
+import type { TaskStatus, TaskPriority } from '@/types/index'
 import { TaskStatus as TaskStatusEnum } from '@/types/index'
 
 interface TaskListProps {
