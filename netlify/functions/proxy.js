@@ -26,15 +26,20 @@ export async function handler(event) {
   const targetUrl = `${BACKEND_BASE_URL}${path}`;
 
   try {
-    
-    const response = await fetch(targetUrl, {
+    const fetchOptions = {
       method: event.httpMethod,
       headers: {
         ...event.headers,
         host: undefined,
       },
-      body: event.body,
-    });
+    };
+
+    // Only include body for requests that can have one
+    if (event.httpMethod !== "GET" && event.httpMethod !== "HEAD") {
+      fetchOptions.body = event.body;
+    }
+
+    const response = await fetch(targetUrl, fetchOptions);
 
     const text = await response.text();
 
