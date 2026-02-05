@@ -4,7 +4,7 @@ import type { Task } from '@/types/index'
 export const tasksService = {
   async getTasks(projectId: string): Promise<Task[]> {
     const response = await axiosInstance.get<Task[]>('tasks/', {
-      data: { projectId },
+      params: { projectId },
     })
     return response.data
   },
