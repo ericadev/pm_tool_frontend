@@ -18,9 +18,9 @@ export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority]
 export interface Project {
   id: string
   name: string
-  description: string
-  color: string
-  icon: string
+  description?: string
+  color?: string
+  icon?: string
   createdAt: string
   updatedAt: string
 }

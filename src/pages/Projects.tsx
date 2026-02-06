@@ -1,9 +1,11 @@
+import { useNavigate } from 'react-router-dom'
 import { useProjects } from '@/features/projects/hooks/useProjects'
 import { ProjectCard } from '@/features/projects/components/ProjectCard'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 
 function Projects() {
+  const navigate = useNavigate()
   const { user } = useAuth()
   const { data: projects = [], isLoading, error } = useProjects()
 
@@ -17,7 +19,7 @@ function Projects() {
               {user && `Welcome back, ${user.firstName || user.email}`}
             </p>
           </div>
-          <Button>Create Project</Button>
+          <Button onClick={() => navigate('/projects/new')}>Create Project</Button>
         </div>
 
         {isLoading && (
