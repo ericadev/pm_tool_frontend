@@ -1,15 +1,23 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { ArrowLeft, Plus } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ProjectForm } from '@/features/projects/components/ProjectForm'
 import { useCreateProject, useProject } from '@/features/projects/hooks/useProjects'
+import { TaskForm } from '@/features/tasks/components/TaskForm'
+import { TaskList } from '@/features/tasks/components/TaskList'
+import { useCreateTask } from '@/features/tasks/hooks/useTasks'
+import { TaskStatus, type TaskPriority } from '@/types/index'
 
 function ProjectDetail() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const [error, setError] = useState<string | null>(null)
+  const [taskError, setTaskError] = useState<string | null>(null)
+  const [isAddingTask, setIsAddingTask] = useState(false)
   const { mutate: createProject, isPending: isCreating } = useCreateProject()
+  const { mutateAsync: createTask, isPending: isCreatingTask } = useCreateTask()
   const { data: project, isLoading, error: loadError } = useProject(id || '')
 
   const isNewProject = id === 'new'
@@ -32,6 +40,32 @@ function ProjectDetail() {
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create project')
+    }
+  }
+
+  async function handleCreateTask(data: {
+    title: string
+    description?: string
+    priority: TaskPriority
+    dueDate?: string
+  }) {
+    if (!project) {
+      return
+    }
+
+    try {
+      setTaskError(null)
+      await createTask({
+        title: data.title,
+        description: data.description || '',
+        projectId: project.id,
+        status: TaskStatus.TODO,
+        priority: data.priority,
+        dueDate: data.dueDate || undefined,
+      })
+      setIsAddingTask(false)
+    } catch (err) {
+      setTaskError(err instanceof Error ? err.message : 'Failed to add task')
     }
   }
 
@@ -85,11 +119,12 @@ function ProjectDetail() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8">
         <Button variant="outline" onClick={() => navigate('/projects')} className="mb-6">
-          ← Back to Projects
+          <ArrowLeft className="size-4" />
+          Back to Projects
         </Button>
-        <Card>
+        <Card className="mb-6">
           <CardHeader>
             <div className="flex items-center gap-3 mb-2">
               <div
@@ -123,6 +158,47 @@ function ProjectDetail() {
                 <p className="text-2xl">{project.icon || '📋'}</p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+              <CardTitle>Tasks</CardTitle>
+              <CardDescription className="mt-2">Plan and track work for this project</CardDescription>
+            </div>
+            <Button
+              onClick={() => {
+                setTaskError(null)
+                setIsAddingTask(true)
+              }}
+              disabled={isAddingTask}
+            >
+              <Plus className="size-4" />
+              Add Task
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {taskError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+                {taskError}
+              </div>
+            )}
+
+            {isAddingTask && (
+              <div className="border border-gray-200 rounded-lg bg-gray-50 p-4">
+                <TaskForm
+                  onSubmit={handleCreateTask}
+                  isLoading={isCreatingTask}
+                  onCancel={() => {
+                    setTaskError(null)
+                    setIsAddingTask(false)
+                  }}
+                />
+              </div>
+            )}
+
+            <TaskList projectId={project.id} />
           </CardContent>
         </Card>
       </div>

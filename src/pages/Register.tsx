@@ -51,7 +51,7 @@ function Register() {
     setIsLoading(true)
     try {
       const apiUrl = import.meta.env.VITE_API_URL
-      const response = await axios.post(`${apiUrl}users`, values)
+      const response = await axios.post(`${apiUrl}users/`, values)
       if (response.status === 200) {
         // Show success toast
         const toast = document.createElement('div')

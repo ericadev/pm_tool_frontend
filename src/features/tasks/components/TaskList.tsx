@@ -38,13 +38,13 @@ export function TaskList({ projectId }: TaskListProps) {
 
   const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
-      case 'low':
+      case 'LOW':
         return 'text-gray-500'
-      case 'medium':
+      case 'MEDIUM':
         return 'text-yellow-500'
-      case 'high':
+      case 'HIGH':
         return 'text-orange-500'
-      case 'urgent':
+      case 'URGENT':
         return 'text-red-500'
       default:
         return 'text-gray-500'
