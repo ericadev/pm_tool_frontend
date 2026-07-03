@@ -31,7 +31,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </CardHeader>
         <CardContent className="pt-0">
           <div className="text-xs text-gray-500 mb-3">Tasks:</div>
-          <TaskList projectId={project.id} />
+          <TaskList projectId={project.id} showDeleteButton={false} />
         </CardContent>
       </Card>
     </Link>

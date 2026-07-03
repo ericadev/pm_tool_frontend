@@ -1,13 +1,20 @@
-import { useTasks } from '../hooks/useTasks'
+import { useState } from 'react'
+import { Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useDeleteTask, useTasks } from '../hooks/useTasks'
 import type { TaskStatus, TaskPriority } from '@/types/index'
 import { TaskStatus as TaskStatusEnum } from '@/types/index'
 
 interface TaskListProps {
   projectId: string
+  showDeleteButton?: boolean
 }
 
-export function TaskList({ projectId }: TaskListProps) {
+export function TaskList({ projectId, showDeleteButton = true }: TaskListProps) {
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null)
   const { data: tasks = [], isLoading, error } = useTasks(projectId)
+  const { mutateAsync: deleteTask } = useDeleteTask()
 
   if (isLoading) {
     return <div className="text-sm text-gray-500">Loading tasks...</div>
@@ -51,15 +58,55 @@ export function TaskList({ projectId }: TaskListProps) {
     }
   }
 
+  async function handleDeleteTask(taskId: string, taskTitle: string) {
+    const confirmed = window.confirm(`Delete "${taskTitle}"?`)
+
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      setDeleteError(null)
+      setDeletingTaskId(taskId)
+      await deleteTask(taskId)
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : 'Failed to delete task')
+    } finally {
+      setDeletingTaskId(null)
+    }
+  }
+
   return (
     <div className="space-y-2">
+      {deleteError && (
+        <div className="text-sm text-red-500">{deleteError}</div>
+      )}
       {tasks.map((task) => (
         <div key={task.id} className="p-3 border border-gray-200 rounded-lg hover:shadow-sm transition-shadow">
-          <div className="flex items-start justify-between mb-1">
-            <h4 className="font-medium text-sm">{task.title}</h4>
-            <span className={`text-xs px-2 py-1 rounded ${getStatusColor(task.status)}`}>
-              {task.status.replace('_', ' ')}
-            </span>
+          <div className="flex items-start justify-between gap-3 mb-1">
+            <div className="flex flex-wrap items-start gap-2 min-w-0">
+              <h4 className="font-medium text-sm break-words">{task.title}</h4>
+              <span className={`text-xs px-2 py-1 rounded ${getStatusColor(task.status)}`}>
+                {task.status.replace('_', ' ')}
+              </span>
+            </div>
+            {showDeleteButton && (
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon-sm"
+                aria-label={`Delete ${task.title}`}
+                title={`Delete ${task.title}`}
+                disabled={deletingTaskId === task.id}
+                onClick={(event) => {
+                  event.preventDefault()
+                  event.stopPropagation()
+                  void handleDeleteTask(task.id, task.title)
+                }}
+              >
+                <Trash2 className="size-4" />
+              </Button>
+            )}
           </div>
           {task.description && (
             <p className="text-xs text-gray-600 mb-2">{task.description}</p>

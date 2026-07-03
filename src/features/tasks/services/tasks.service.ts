@@ -15,7 +15,6 @@ export const tasksService = {
   },
 
   async createTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Promise<Task> {
-    console.log('Creating task:', task) // Debugging log
     const response = await axiosInstance.post<Task>('tasks/', task)
     return response.data
   },
